@@ -1,0 +1,217 @@
+from tkinter import *
+from PIL import Image, ImageTk
+import random
+from tkinter.ttk import Style
+
+
+
+class Scene:
+
+    WIDTH = 600
+    HEIGHT = 600
+
+    def __init__(self):
+        self.root = Tk()
+        self.root.title("Виселица")
+        self.canvas = Canvas(self.root, width=self.WIDTH, height=self.HEIGHT, bg="#F8E0E0")
+        self.canvas.pack()
+        self.text = Text(self.root, self.canvas)
+
+    def getParams(self):
+        return self.WIDTH, self.HEIGHT
+
+
+class People:
+    def __init__(self, root, canvas):
+        self.root = root
+        self.canvas = canvas
+
+    def golova(self):
+        self.canvas.create_oval(79, 59, 120, 80, width=4, fill='grey')
+        self.root.update()
+
+    def telo(self):
+        self.canvas.create_line(100, 80, 100, 200, width=4)
+        self.root.update()
+
+    def rukaP(self):
+        self.canvas.create_line(100, 80, 145, 100, width=4)
+        self.root.update()
+
+    def rukaL(self):
+        self.canvas.create_line(100, 80, 45, 100, width=4)
+        self.root.update()
+
+    def nogaL(self):
+        self.canvas.create_line(100, 200, 45, 300, width=4)
+        self.root.update()
+
+    def nogaP(self):
+        self.canvas.create_line(100, 200, 145, 300, width=4)
+        self.root.update()
+
+
+class Text:
+    slova = ["аналитик", "музыкант", "модельер", "прогресс", "страница", "телеграф", "микрофон", "светофор", "сенсация", "ватрушка"]
+    alfabet = "абвгдеёжзийклмнопрстуфхцчшщъыьэюя"
+    btn_with_text = {}
+    list1 = [1, 2, 3, 4, 5, 6]
+    er = []
+    win = []
+
+    wo = ""
+    wor = []
+
+    def __init__(self, root, canvas):
+        self.root = root
+        self.canvas = canvas
+        print("Это класс текст")
+        self.person = People(self.root, self.canvas)
+        self.start_text()
+        style1 = Style()
+        style1.configure("TFrame", background="#333")
+        image = ImageTk.PhotoImage(file='pic.png')
+        btn01 = Button(root, text="Начать",  width=255, height=70, image=image, command=lambda: self.main_graphics())
+        btn01.place(x=150, y=442)
+        root.mainloop()
+
+
+
+
+    def main_graphics(self):
+        y = 0
+        while y < 600:
+            x = 0
+            while x < 600:
+                self.canvas.create_rectangle(x, y, x + 33, y + 27, fill="white", outline="blue")
+                self.canvas.create_line(10, 8, 10, 300, width=3, fill="black")
+                self.canvas.create_line(8, 10, 200, 10, width=3, fill="black")
+                self.canvas.create_line(10, 100, 100, 10, width=3, fill="black")
+                x = x + 33
+            y = y + 27
+
+        self.generate_textfield()
+
+    def start_text(self):
+        faq = '''
+                     ПРИВЕТ,  ДАВАЙ ПОИГРАЕМ!
+                                  
+                        Принцип игры виселица:
+Один из игроков загадывает слово — пишет на бумаге первую 
+и последнюю букву слова и отмечает места для остальных букв, 
+например чертами. За каждую неправильную букву поэтапно рисуется виселица с петлёй.'''
+        self.canvas.create_text(310, 240, text=faq, fill="purple", font=("Helvetica", "14"))
+
+    def gen(self, u, x, y):
+        self.btn_with_text[u] = Button(self.root, text=u, width=3, height=1, command=lambda: self.a(u))
+        self.btn_with_text[u].place(x=str(x), y=str(y))
+
+    def generate_textfield(self):
+        word = random.choice(self.slova)
+        self.wo = word[1:-1]
+        self.wor.clear()
+        self.er.clear()
+        for i in self.wo:
+            self.wor.append(i)
+        a0 = self.canvas.create_text(282, 40, text=word[0], fill="purple", font=("Helvetica", "18"))
+        a1 = self.canvas.create_text(315, 40, text="_", fill="purple", font=("Helvetica", "18"))
+        a2 = self.canvas.create_text(347, 40, text="_", fill="purple", font=("Helvetica", "18"))
+        a3 = self.canvas.create_text(380, 40, text="_", fill="purple", font=("Helvetica", "18"))
+        a4 = self.canvas.create_text(412, 40, text="_", fill="purple", font=("Helvetica", "18"))
+        a5 = self.canvas.create_text(444, 40, text="_", fill="purple", font=("Helvetica", "18"))
+        a6 = self.canvas.create_text(477, 40, text="_", fill="purple", font=("Helvetica", "18"))
+        a7 = self.canvas.create_text(510, 40, text=word[-1], fill="purple", font=("Helvetica", "18"))
+
+        x = 265
+        y = 110
+
+        for i in self.alfabet[0:8]:
+            self.gen(i, x, y)
+            x = x + 33
+        x = 265
+        y = 137
+        for i in self.alfabet[8:16]:
+            self.gen(i, x, y)
+            x = x + 33
+        x = 265
+        y = 164
+        for i in self.alfabet[16:24]:
+            self.gen(i, x, y)
+            x = x + 33
+        x = 265
+        y = 191
+        for i in self.alfabet[24:33]:
+            self.gen(i, x, y)
+            x = x + 33
+
+    def a(self, v):
+        ind_alf = self.alfabet.index(v)
+        key = self.alfabet[ind_alf]
+        if v in self.wor:
+            ind = self.wor.index(v)
+            b2 = self.list1[ind]
+            self.wor[ind] = '1'
+            x1, y1 = self.kord(b2)
+            self.win.append(v)
+            a2 = self.canvas.create_text(x1, y1, text=self.wo[ind], fill="purple", font=("Helvetica", "18"))
+            self.btn_with_text[key]["bg"] = "green"
+
+
+            if not v in self.wor:
+                self.btn_with_text[key]["state"] = "disabled"
+            if v in self.wor:
+                self.win.append(v)
+                ind2 = self.wor.index(v)
+                b2 = self.list1[ind2]
+                x1, y1 = self.kord(b2)
+                self.canvas.create_text(x1, y1, text=self.wo[ind2], fill="purple", font=("Helvetica", "18"))
+            if len(self.win) == 6:
+                self.canvas.create_text(300, 350, text="Ты победил!", fill="purple",
+                                   font=("Helvetica", "18"))
+
+                for i in self.alfabet:
+                    self.btn_with_text[i]["state"] = "disabled"
+        else:
+            self.er.append(v)
+            self.btn_with_text[key]["bg"] = "red"
+            self.btn_with_text[key]["state"] = "disabled"
+            if len(self.er) == 1:
+                self.person.golova()
+            elif len(self.er) == 2:
+                self.person.telo()
+            elif len(self.er) == 3:
+                self.person.rukaP()
+            elif len(self.er) == 4:
+                self.person.rukaL()
+            elif len(self.er) == 5:
+                self.person.nogaL()
+            elif len(self.er) == 6:
+                self.person.nogaP()
+                self.end()
+                self.root.update()
+
+    def kord(self, b2):
+        if b2 == 1:
+            x1, y1 = 315, 40
+        if b2 == 2:
+            x1, y1 = 347, 40
+        if b2 == 3:
+            x1, y1 = 380, 40
+        if b2 == 4:
+            x1, y1 = 412, 40
+        if b2 == 5:
+            x1, y1 = 444, 40
+        if b2 == 6:
+            x1, y1 = 477, 40
+        return x1, y1
+
+    def end(self):
+        self.canvas.create_text(300, 350, text="Ты проиграл!", fill="purple", font=("Helvetica", "20"))
+        for i in self.alfabet:
+            self.btn_with_text[i]["state"] = "disabled"
+
+    def getWord(self):
+        return self.slova
+
+
+a = Scene()
