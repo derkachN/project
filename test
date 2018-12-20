@@ -1,0 +1,22 @@
+import unittest
+from scr.second_version import Scene
+
+
+class TestGame(unittest.TestCase):
+    def setUp(self):
+        self.widget = Scene()
+
+    # Тестируем список слов для игры из класса Text()
+    # Сравнимаем список с заданным без учета порядка слов
+    def test_param_kors_function(self):
+        self.assertCountEqual(self.widget.text.getWord(),
+                              ["прогресс", "страница", "модельер", "аналитик", "музыкант", "светофор", "микрофон", "телеграф", "сенсация", "ватрушка"])
+
+    # Тест проверки размеров сцены. Первый случай. Сравнивает
+    # возвращаемые значения метода getParams() с заданными
+    def test_default_widget_size(self):
+        self.assertEqual(self.widget.getParams(), (600, 600))
+
+
+if __name__ == '__main__':
+    unittest.main()
