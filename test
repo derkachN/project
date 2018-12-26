@@ -1,5 +1,9 @@
+from tkinter import *  # 1
+from PIL import Image, ImageTk
+import random
+from tkinter.ttk import Style
 import unittest
-from scr.second_version import Scene
+from second_version import *
 
 
 class TestGame(unittest.TestCase):
@@ -17,6 +21,17 @@ class TestGame(unittest.TestCase):
     def test_default_widget_size(self):
         self.assertEqual(self.widget.getParams(), (600, 600))
 
+    def test_1_true(self):
+        # s = Scene()
 
+        self.assertIn('1', Text.wor)  # проверяет, есть ли 1 в массиве с буквами
+
+    def test_2_and_more(self):
+        k = list()
+        for i in Text.wor:
+            if i == '1':
+                k.append(i)
+        self.assertGreater(len(k), 1)
 if __name__ == '__main__':
     unittest.main()
+
